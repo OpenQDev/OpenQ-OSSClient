@@ -1,25 +1,31 @@
-class {
-		dataSources = {
-				ossinsights: {
-						endpoint: 'https://ossinsights.com',
-				},
-				graphQL: {
-						endpoint: 'https://graphql.com',
-				},
-				rest: {
-						endpoint: 'https://rest.com',
-				},
-				bigquery: {
-						endpoint: 'https://bigquery.com',
-				},
-				gitguru: {
-						endpoint: 'https://gitguru.com',
-				}
-		}
+class OSSClient {
+		
+	constructor() {}
 
-		constructor() {
-				this.name = 'John Doe';
-		}
+	tokenRepository = {
+		
+	}
 
-
+	dataSources = {
+			ossinsights: {
+					endpoint: 'https://ossinsights.com',
+					token: 'ossinsights'
+			},
+			graphQL: {
+					endpoint: 'https://graphql.com',
+					token: 'ghauth'
+			},
+			rest: {
+					endpoint: 'https://rest.com',
+					token: 'ghauth'
+			},
+			bigquery: {
+					endpoint: 'https://bigquery.com',
+					token: 'google?'
+			},
+			gitguru: {
+					endpoint: 'https://gitguru.com',
+					token: 'none'
+			}
+	}
 }
