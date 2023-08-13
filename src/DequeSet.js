@@ -1,7 +1,13 @@
-// A double-ended queue (deque) is a queue-like data structure that supports insertion and deletion at both the front and the back of the queue.
-// The following snippet implements a deque using an array:
+// A double-ended queue set (deque set) is a queue-like data structure that supports insertion and deletion at both the front and the back of the queue.
+// The "set" comes from the fact that it contains all unique elements
 
-class OrderedSet {
+// OPERATION
+// We enqueu fresh new tokens to the front of the queue
+// Once exhausted or approaching exhaustion, we dequeue the token from the front and enqueue it to the back
+// This gives it time to "reload" while we use the next token in the deque set
+// The uniqueness property is important because we don't want to use the same token twice in a row after its been exhausted
+
+class DequeueSet {
   constructor() {
     this.items = {};
     this.queue = [];
@@ -51,13 +57,13 @@ class OrderedSet {
 }
 
 // Example usage
-const orderedSet = new OrderedSet();
+const dequeueSet = new DequeueSet();
 
-orderedSet.enqueue(1);
-orderedSet.enqueue(2);
-orderedSet.enqueue(3);
+dequeueSet.enqueue('valid_token_1');
+dequeueSet.enqueue('valid_token_2');
+dequeueSet.enqueue('valid_token_3');
 
-console.log(orderedSet);
-orderedSet.sendToBack(orderedSet.peek());
+console.log(dequeueSet);
+dequeueSet.sendToBack(dequeueSet.peek());
 
-console.log(orderedSet)
+console.log(dequeueSet)
