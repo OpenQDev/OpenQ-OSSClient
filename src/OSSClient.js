@@ -1,41 +1,76 @@
-const OrderedSet = require("./OrderedSet")
+const TokenQueue = require("./TokenQueue")
+const axios = require('axios');
 
+/**
+ * The OSSClient is a wrapper around several data sources on open-source software
+ * The OSSClient handles:
+ * - authentication to the data sources by choosing the correct token type
+ * - rate limiting by switching to a new token when the current one is exhausted
+ * - pagination by making multiple requests to the data source when necessary
+ * - errors by retrying requests that fail due to rate limiting or other errors
+ * - caching by storing results in a local database
+ * - formatting by returning results in a consistent format
+ */
 class OSSClient {
 		
-	tokenDeque = new OrderedSet();
+	tokenQueue = new TokenQueue();
 	
-	constructor() {
-		this.tokenDeque.enqueue('valid_token_1');
-		this.tokenDeque.enqueue('valid_token_2');
-		this.tokenDeque.enqueue('valid_token_3');
-	}
+	constructor() {}
 
 	dataSources = {
 		localhost: {
 			endpoint: 'http://localhost:3000',
 			token: 'mock_token'
 		},
-			ossinsights: {
-					endpoint: 'https://ossinsights.com',
-					token: 'ossinsights'
-			},
-			graphQL: {
-					endpoint: 'https://graphql.com',
-					token: 'ghauth'
-			},
-			rest: {
-					endpoint: 'https://rest.com',
-					token: 'ghauth'
-			},
-			bigquery: {
-					endpoint: 'https://bigquery.com',
-					token: 'google?'
-			},
-			gitguru: {
-					endpoint: 'https://gitguru.com',
-					token: 'none'
-			}
+		graphQL: {
+				endpoint: 'https://graphql.com',
+				token: 'ghauth'
+		},
+		rest: {
+				endpoint: 'https://api.github.com',
+				token: 'ghauth'
+		},
+		bigquery: {
+				endpoint: 'https://bigquery.googleapis.com/bigquery/v2/projects/YOUR_PROJECT_ID/queries',
+				token: 'gcloudauth'
+		},
+		// OSSInsights Public API has no authentication yet, but rate limits to 600 requests/hour/IP address
+		// Docs: https://ossinsight.io/docs/api
+		ossinsights: {
+			endpoint: 'https://api.ossinsight.io/v1',
+			token: 'none'
+	 	}
 	}
+	
+	makeBigQueryRequest = async () => {
+			const userId = 93455288;
+			const startYear = 20;
+			const endYear = 23;
+
+			const query = `SELECT DISTINCT repo.url FROM githubarchive.year.20* WHERE type IN ('PushEvent', 'PullRequestEvent') AND (_TABLE_SUFFIX BETWEEN '${startYear}' AND '${endYear}') AND actor.id = ${userId}`;
+
+			try {
+					const response = await axios.post(
+							'https://bigquery.googleapis.com/bigquery/v2/projects/YOUR_PROJECT_ID/queries',
+							{
+									query: query,
+									useLegacySql: false
+							},
+							{
+									headers: {
+											Authorization: `Bearer ${accessToken}`,
+											'Content-Type': 'application/json'
+									}
+							}
+					);
+
+					const results = response.data;
+					// Process the results as needed
+					console.log(results);
+			} catch (error) {
+					console.error('Error making BigQuery request:', error);
+			}
+	};
 
   makeRequest = async (url, dataSourceKey) => {
     if (!this.dataSources.hasOwnProperty(dataSourceKey)) {
@@ -43,7 +78,7 @@ class OSSClient {
     }
 
     const dataSource = this.dataSources[dataSourceKey];
-    const authToken = this.tokenDeque.peek(); // Get the first token from the deque
+    const authToken = this.tokenQueue.getToken(); // Get the first token from the deque
 
     try {
       const response = await axios.get(url, {
@@ -57,6 +92,7 @@ class OSSClient {
       throw new Error(`Request failed: ${error.message}`);
     }
   };
+
 }
 
 // Example usage

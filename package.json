@@ -1,9 +1,10 @@
 {
-  "name": "tokenswitcher",
+  "name": "OpenQ-OSSClient",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
+    "start": "node __tests__/server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
