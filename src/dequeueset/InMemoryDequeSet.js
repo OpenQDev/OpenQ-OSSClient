@@ -1,13 +1,6 @@
-// A double-ended queue set (deque set) is a queue-like data structure that supports insertion and deletion at both the front and the back of the queue.
-// The "set" comes from the fact that it contains all unique elements
+import './DequeueSet.js'
 
-// OPERATION
-// We enqueu fresh new tokens to the front of the queue
-// Once exhausted or approaching exhaustion, we dequeue the token from the front and enqueue it to the back
-// This gives it time to "reload" while we use the next token in the deque set
-// The uniqueness property is important because we don't want to use the same token twice in a row after its been exhausted
-
-class DequeueSet {
+class InMemoryDequeueSet implements DequeueSet {
   constructor() {
     this.items = {};
     this.queue = [];
@@ -20,7 +13,7 @@ class DequeueSet {
     }
   }
 
-  dequeue() {
+  dequeueue() {
     if (this.queue.length === 0) {
       return undefined;
     }
@@ -57,7 +50,7 @@ class DequeueSet {
 }
 
 // Example usage
-const dequeueSet = new DequeueSet();
+const dequeueueSet = new dequeueueSet();
 
 dequeueSet.enqueue('valid_token_1');
 dequeueSet.enqueue('valid_token_2');

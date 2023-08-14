@@ -1,52 +1,53 @@
-import './DequeSet.js'
+const DequeueSet = require('./DequeueSet.js')
+const InMemoryDequeueSet = require('./InMemoryDequeueSet.js')
+const RedisDequeueSet = require('./RedisDequeueSet.js')
 
-/**
- * An interface representing a token queue that allows adding, removing, and retrieving tokens.
- */
-interface TokenQueue {
+class TokenQueue implements TokenQueue {
+	dequeueSet DequeueSet;
+	
+	constructor() {
+		if (type == 'in-memory') {
+			this.dequeueSet = new InMemoryDequeueSet();
+		} else if (type == 'redis') {
+			this.dequeueSet = new RedisDequeueSet();
+		} else {
+			throw new Error('Unknown TokenQueue initialization type')
+		}
+	}
 
 	/**
 	 * Adds a token to the queue.
 	 *
 	 * @param token The token to be added to the queue.
 	 */
-	void addToken(Token token);
-
-	/**
-	 * Removes a specific token from the queue.
-	 *
-	 * @param token The token to be removed from the queue.
-	 */
-	void removeToken(Token token);
+	addToken(token) {
+		this.dequeueSet.enqueue(token);
+	}
 
 	/**
 	 * Retrieves and removes a token from the front of the queue.
 	 *
 	 * @return The token at the front of the queue.
 	 */
-	Token getToken();
-}
-
-
-class InMemoryTokenQueue implements TokenQueue {
-	constructor() {
-		this.dequeueSet = new DequeueSet();
-		this.tokens = [];
+	getToken() {
+		return this.dequeueSet.peek();
 	}
 
-	enqueue(token) {
-		this.tokens.push(token);
+	/**
+	 * Removes a specific token from the queue.
+	 *
+	 * @param token The token to be removed from the queue.
+	 */
+	removeToken(token) {
+		this.dequeueSet.remove(token);
 	}
 
-	dequeue() {
-		return this.tokens.shift();
-	}
-
-	peek() {
-		return this.tokens[0];
-	}
-
-	isEmpty() {
-		return this.tokens.length === 0;
+	/**
+	 * Sends a specific token to the back of the queue.
+	 *
+	 * @param token The token to be moved to the back of the queue.
+	 */
+	sendToBack(token) {
+		return this.dequeueSet.sendToBack();
 	}
 }
