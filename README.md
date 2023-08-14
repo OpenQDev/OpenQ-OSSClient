@@ -19,38 +19,41 @@ The OSSClient handles:
 
 The following is a list of data sources along with their endpoints and authentication tokens.
 
-- **localhost**
-  - Description: A mock server located at `__tests__/server.js` which has it's own rate limiting for testing
-  - Endpoint: `http://localhost:3000`
-  - Token: `mock_token`
-  - API Documentation
-
-- **graphQL**
+- **Github GraphQL API**
   - Description: Github GraphQL API
   - Endpoint: `https://api.github.com/graphql`
   - Token: `ghauth`
   - API Documentation
 
-- **rest**
+- **Github REST API**
   - Endpoint: `https://api.github.com`
   - Token: `ghauth`
   - API Documentation
 
-- **codesearch**
+- **Github Codesearch API**
   - Endpoint: `https://api.github.com/search/code?VARIABLES`
   - Token: `ghauth`
   - API Documentation
 
-- **bigquery**
+- **Github Archive BigQuery Public Dataset**
   - Endpoint: `https://bigquery.googleapis.com/bigquery/v2/projects/YOUR_PROJECT_ID/queries`
   - Token: `gcloudauth`
   - API Documentation
+	- Resources:
+  	- https://cloud.google.com/blog/topics/public-datasets/github-on-bigquery-analyze-all-the-open-source-code
+		- https://gist.github.com/arfon/49ca314a5b0a00b1ebf91167db3ff02c
 
-- **ossinsights**
+- **OSSInsights**
   - Endpoint: `https://api.ossinsight.io/v1`
   - Token: `none`
   - Rate Limiting: 600 requests per hour per IP address
   - [API Documentation](https://ossinsight.io/docs/api)
+
+- **localhost**
+  - Description: A mock server located at `__tests__/server.js` which has it's own rate limiting for testing
+  - Endpoint: `http://localhost:3000`
+  - Token: `mock_token`
+  - API Documentation
 
 ## TokenQueue
 
