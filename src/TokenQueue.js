@@ -1,12 +1,12 @@
-const DequeueSet = require('./DequeueSet.js')
-const InMemoryDequeueSet = require('./InMemoryDequeueSet.js')
-const RedisDequeueSet = require('./RedisDequeueSet.js')
+const DequeueSet = require('./dequeueset/DequeueSet.js')
+const InMemoryDequeueSet = require('./dequeueset/InMemoryDequeueSet.js')
+const RedisDequeueSet = require('./dequeueset/RedisDequeueSet.js')
 
 class TokenQueue implements TokenQueue {
 	dequeueSet DequeueSet;
 	
-	constructor() {
-		if (type == 'in-memory') {
+	constructor(memoryType) {
+		if (type == 'memory') {
 			this.dequeueSet = new InMemoryDequeueSet();
 		} else if (type == 'redis') {
 			this.dequeueSet = new RedisDequeueSet();
@@ -48,6 +48,6 @@ class TokenQueue implements TokenQueue {
 	 * @param token The token to be moved to the back of the queue.
 	 */
 	sendToBack(token) {
-		return this.dequeueSet.sendToBack();
+		return this.dequeueSet.sendToBack(token);
 	}
 }

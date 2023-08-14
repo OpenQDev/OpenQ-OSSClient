@@ -8,10 +8,11 @@ The OSSClient is a wrapper around several Github data sources.
 
 The OSSClient handles:
 
-- **AUTHENTICATION** to the data sources by choosing the correct token type
-- **RATE LIMIT BUSTING** by swapping access tokens when the current one is exhausted **OR** switching IP address
+- **AUTHENTICATION** to the data sources by choosing the correct URL and authentication token type
+- **RETRIES** by retrying requests that fail due to rate limiting or other errors
+- **TOKEN ROTATION** by swapping access tokens when the current one is exhausted
+- **IP MASKING** (UNDER CONSTRUCTION) by routing the request through a hopper
 - **PAGINATION** by making multiple requests to the data source when necessary
-- **BACKOFFS and RETRIES** by retrying requests that fail due to rate limiting or other errors
 - **CACHING** by storing results in a local database
 - **STANDARD FORMATTING of RESPONSES** regardless of the initial data source
 

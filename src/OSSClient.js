@@ -13,9 +13,11 @@ const axios = require('axios');
  */
 class OSSClient {
 		
-	tokenQueue = new TokenQueue();
+	tokenQueue;
 	
-	constructor() {}
+	constructor(type) {
+		this.tokenQueue = new TokenQueue(type);
+	}
 
 	dataSources = {
 		localhost: {
@@ -23,7 +25,7 @@ class OSSClient {
 			token: 'mock_token'
 		},
 		graphQL: {
-				endpoint: 'https://graphql.com',
+				endpoint: 'https://api.github.com/graphql',
 				token: 'ghauth'
 		},
 		rest: {
@@ -35,7 +37,7 @@ class OSSClient {
 				token: 'gcloudauth'
 		},
 		codesearch: {
-			endpoint: 'https://api.ossinsight.io/v1',
+			endpoint: 'https://api.github.com/search/code?VARIABLES',
 			token: 'ghauth'
 		},
 		// OSSInsights Public API has no authentication yet, but rate limits to 600 requests/hour/IP address
@@ -72,7 +74,8 @@ class OSSClient {
 					// Process the results as needed
 					console.log(results);
 			} catch (error) {
-					console.error('Error making BigQuery request:', error);
+				// implement retry logic here for if it 401s -> refresh token -> retry
+				console.error('Error making BigQuery request:', error);
 			}
 	};
 
