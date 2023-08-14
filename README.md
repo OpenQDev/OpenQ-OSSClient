@@ -1,37 +1,67 @@
+# OpenQ-OSSClient
+
+The OpenQ-OSSClient is composed of the `OSSClient` which uses a `TokenQueue`
+
+## OSSClient
+
+The OSSClient is a wrapper around several Github data sources.
+
+The OSSClient handles:
+
+- **AUTHENTICATION** to the data sources by choosing the correct token type
+- **RATE LIMIT BUSTING** by swapping access tokens when the current one is exhausted **OR** switching IP address
+- **PAGINATION** by making multiple requests to the data source when necessary
+- **BACKOFFS and RETRIES** by retrying requests that fail due to rate limiting or other errors
+- **CACHING** by storing results in a local database
+- **STANDARD FORMATTING of RESPONSES** regardless of the initial data source
 
 ## Data Sources
 
-### First Party Data Sources
+The following is a list of data sources along with their endpoints and authentication tokens.
 
-#### Github GraphQL API
+- **localhost**
+  - Description: A mock server located at `__tests__/server.js` which has it's own rate limiting for testing
+  - Endpoint: `http://localhost:3000`
+  - Token: `mock_token`
+  - API Documentation
 
-[Endpoint](https://api.github.com/graphql)
+- **graphQL**
+  - Description: Github GraphQL API
+  - Endpoint: `https://api.github.com/graphql`
+  - Token: `ghauth`
+  - API Documentation
 
-#### Github REST API
+- **rest**
+  - Endpoint: `https://api.github.com`
+  - Token: `ghauth`
+  - API Documentation
 
-[Endpoint](https://api.github.com)
+- **codesearch**
+  - Endpoint: `https://api.github.com/search/code?VARIABLES`
+  - Token: `ghauth`
+  - API Documentation
 
-#### Github BigQuery
+- **bigquery**
+  - Endpoint: `https://bigquery.googleapis.com/bigquery/v2/projects/YOUR_PROJECT_ID/queries`
+  - Token: `gcloudauth`
+  - API Documentation
 
-Endpoint: https://cloud.google.com/blog/topics/public-datasets/github-on-bigquery-analyze-all-the-open-source-code
+- **ossinsights**
+  - Endpoint: `https://api.ossinsight.io/v1`
+  - Token: `none`
+  - Rate Limiting: 600 requests per hour per IP address
+  - [API Documentation](https://ossinsight.io/docs/api)
 
-#### Github Archive
+## TokenQueue
 
-Endpoint: https://api.github.com/graphql
+The `TokenQueue` is the "dumb pipe" used by the `OSSClient` to get access tokens just in time for a network call.
 
-#### Github cloned repos
+The `TokenQueue` is backed by a `DequeueSet` and houses all logic for adding and removing tokens.
 
-Endpoint: https://api.github.com/graphql
+The `OSSClient` calls `TokenQueue.getToken` whenever it needs a token.
 
-#### Github Codesearch
+Based on the response, `OSSClient` may tell `TokenQueue` to either A) send the token it just used to the back of the queue, or B) remove the token entirely
 
-Endpoint: https://api.github.com/graphql
+The `TokenQueue`, as an interface, can have multiple implemnetations.
 
-
-### Third Party Data Sources
-
-#### [OSSInsight Public APIs (beta)](https://ossinsight.io/docs/api)
-
-- API Endpoint: 
-- Rate Limit: 600 requests per hour
-- OSSInsights Github repository: https://github.com/pingcap/ossinsight
+For example, the `InMemoryTokenQueue` and the `RedisTokenQueue`

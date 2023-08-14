@@ -34,6 +34,10 @@ class OSSClient {
 				endpoint: 'https://bigquery.googleapis.com/bigquery/v2/projects/YOUR_PROJECT_ID/queries',
 				token: 'gcloudauth'
 		},
+		codesearch: {
+			endpoint: 'https://api.ossinsight.io/v1',
+			token: 'ghauth'
+		},
 		// OSSInsights Public API has no authentication yet, but rate limits to 600 requests/hour/IP address
 		// Docs: https://ossinsight.io/docs/api
 		ossinsights: {
