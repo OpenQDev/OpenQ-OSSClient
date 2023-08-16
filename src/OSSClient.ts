@@ -1,6 +1,6 @@
 import TokenQueue from "./TokenQueue";
 import axios, { AxiosResponse } from "axios"
-import StorageType from "./StorageType";
+import { StorageType } from "./types";
 
 /**
  * The OSSClient is a wrapper around several data sources on open-source software
