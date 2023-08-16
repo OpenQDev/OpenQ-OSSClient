@@ -1,6 +1,6 @@
 # OpenQ-OSSClient
 
-The OpenQ-OSSClient is composed of the `OSSClient` which uses a `TokenQueue`
+The OpenQ-OSSClient is composed of the `OSSClient` which uses a `TokenQueue`.
 
 ## OSSClient
 
