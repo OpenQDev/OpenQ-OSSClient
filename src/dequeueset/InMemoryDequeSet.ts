@@ -1,19 +1,22 @@
-import './DequeueSet'
+import DequeueSet from './DequeueSet'
 
 export default class InMemoryDequeueSet implements DequeueSet {
-  constructor() {
+  items: any;
+	queue: any;
+
+	constructor() {
     this.items = {};
     this.queue = [];
   }
 
-  enqueue(item) {
+  enqueue(item: string) {
     if (!this.items.hasOwnProperty(item)) {
       this.items[item] = true;
       this.queue.push(item);
     }
   }
 
-  dequeueue() {
+  dequeue() {
     if (this.queue.length === 0) {
       return undefined;
     }
@@ -31,14 +34,14 @@ export default class InMemoryDequeueSet implements DequeueSet {
     return this.queue[0];
   }
 
-  remove(item) {
+  remove(item: string) {
     if (this.items.hasOwnProperty(item)) {
       delete this.items[item];
-      this.queue = this.queue.filter(queueItem => queueItem !== item);
+      this.queue = this.queue.filter((queueItem: string) => queueItem !== item);
     }
   }
 
-  sendToBack(item) {
+  sendToBack(item: string) {
     if (this.items.hasOwnProperty(item)) {
       const index = this.queue.indexOf(item);
       if (index !== -1) {
@@ -50,13 +53,13 @@ export default class InMemoryDequeueSet implements DequeueSet {
 }
 
 // Example usage
-const dequeueueSet = new dequeueueSet();
+const inMemoryDequeueSet = new InMemoryDequeueSet();
 
-dequeueSet.enqueue('valid_token_1');
-dequeueSet.enqueue('valid_token_2');
-dequeueSet.enqueue('valid_token_3');
+inMemoryDequeueSet.enqueue('valid_token_1');
+inMemoryDequeueSet.enqueue('valid_token_2');
+inMemoryDequeueSet.enqueue('valid_token_3');
 
-console.log(dequeueSet);
-dequeueSet.sendToBack(dequeueSet.peek());
+console.log(inMemoryDequeueSet);
+inMemoryDequeueSet.sendToBack(inMemoryDequeueSet.peek());
 
-console.log(dequeueSet)
+console.log(inMemoryDequeueSet)
