@@ -1,6 +1,6 @@
 import TokenQueue from "./TokenQueue";
 import axios, { AxiosResponse } from "axios"
-import { StorageType } from "./types";
+import { StorageType, DataSources } from "./types";
 
 /**
  * The OSSClient is a wrapper around several data sources on open-source software
@@ -12,12 +12,6 @@ import { StorageType } from "./types";
  * - caching by storing results in a local database
  * - formatting by returning results in a consistent format
  */
-type DataSource = {
-  endpoint: string;
-  token: string;
-};
-
-type DataSources = Record<string, DataSource>;
 
 export default class OSSClient {
 		
