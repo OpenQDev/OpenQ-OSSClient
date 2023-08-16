@@ -62,18 +62,3 @@ export default class RedisDequeueSet implements DequeueSet {
 		return this.queue.length === 0;
 	}
 }
-
-// Example usage
-const redisDequeueSet = new RedisDequeueSet();
-
-redisDequeueSet.enqueue('valid_token_1');
-redisDequeueSet.enqueue('valid_token_2');
-redisDequeueSet.enqueue('valid_token_3');
-
-console.log(redisDequeueSet);
-
-if (!redisDequeueSet.isEmpty()) {
-	redisDequeueSet.sendToBack(redisDequeueSet.peek() as string);
-}
-
-console.log(redisDequeueSet)
