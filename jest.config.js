@@ -6,4 +6,5 @@ module.exports = {
     '^.+\\.(ts|tsx)$': 'ts-jest',
   },
   testMatch: ['**/*.test.(ts|js)'],
+	testPathIgnorePatterns: ['/dist/']
 };
