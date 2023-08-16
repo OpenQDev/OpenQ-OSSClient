@@ -40,7 +40,7 @@ jobs:
           context: .
           file: ./Dockerfile
           push: true
-          tags: openq/ossclient:${{ github.ref_name }}
+          tags: openq/openq-ossclient:${{ github.ref_name }}
   tagHelm:
     needs: build
     uses: OpenQDev/OpenQ-Workflows/.github/workflows/tag.yml@main
