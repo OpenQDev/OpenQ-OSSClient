@@ -36,6 +36,8 @@ export default class InMemoryDequeueSet implements DequeueSet {
 
   /**
    * Dequeues and removes the first item from the dequeue set.
+	 * NOTE: Mainly only used if the token is not just exhausted, but totally invalid and shouldn't be retried.
+	 * If the token is just exhausted, it should be sent to the back of the queue.
    * @returns The dequeued item, or null if the dequeue set is empty.
    */
   dequeue(): string | null {
@@ -68,7 +70,7 @@ export default class InMemoryDequeueSet implements DequeueSet {
   }
 
   /**
-   * Removes a specified item from the dequeue set.
+   * Removes a specified item from the dequeue set from any position.
    * @param item - The item to be removed.
    */
   remove(item: string): void {
@@ -108,6 +110,10 @@ inMemoryDequeueSet.enqueue('valid_token_1');
 inMemoryDequeueSet.enqueue('valid_token_2');
 inMemoryDequeueSet.enqueue('valid_token_3');
 
+// [ 'valid_token_1', 'valid_token_2', 'valid_token_3' ]
+console.log(inMemoryDequeueSet.queue);
+
+inMemoryDequeueSet.enqueue('valid_token_1');
 // [ 'valid_token_1', 'valid_token_2', 'valid_token_3' ]
 console.log(inMemoryDequeueSet.queue);
 
