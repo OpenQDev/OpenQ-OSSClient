@@ -1,11 +1,11 @@
-import DequeueSet from './dequeueset/DequeueSet.js'
-import InMemoryDequeueSet from './dequeueset/InMemoryDequeueSet.js'
-import RedisDequeueSet from './dequeueset/RedisDequeueSet.js'
+import DequeueSet from './dequeueset/DequeueSet'
+import InMemoryDequeueSet from './dequeueset/InMemoryDequeueSet'
+import RedisDequeueSet from './dequeueset/RedisDequeueSet'
 
-class TokenQueue {
+export default class TokenQueue {
 	dequeueSet: DequeueSet;
 	
-	constructor(type) {
+	constructor(type: string) {
 		if (type == 'memory') {
 			this.dequeueSet = new InMemoryDequeueSet();
 		} else if (type == 'redis') {
@@ -20,7 +20,7 @@ class TokenQueue {
 	 *
 	 * @param token The token to be added to the queue.
 	 */
-	addToken(token) {
+	addToken(token: string) {
 		this.dequeueSet.enqueue(token);
 	}
 
@@ -29,7 +29,7 @@ class TokenQueue {
 	 *
 	 * @return The token at the front of the queue.
 	 */
-	getToken() {
+	getToken(): string {
 		return this.dequeueSet.peek();
 	}
 
@@ -38,7 +38,7 @@ class TokenQueue {
 	 *
 	 * @param token The token to be removed from the queue.
 	 */
-	removeToken(token) {
+	removeToken(token: string): void {
 		this.dequeueSet.remove(token);
 	}
 
@@ -47,7 +47,7 @@ class TokenQueue {
 	 *
 	 * @param token The token to be moved to the back of the queue.
 	 */
-	sendToBack(token) {
+	sendToBack(token: string): void {
 		return this.dequeueSet.sendToBack(token);
 	}
 }

@@ -1,4 +1,5 @@
-import express from 'express'
+import axios from "axios"
+import express, { Request, Response } from 'express';
 import bodyParser from 'body-parser';
 
 const app = express();
@@ -6,7 +7,7 @@ app.use(bodyParser.json());
 
 const validTokens = ['valid_token_1', 'valid_token_2', 'valid_token_3'];
 
-app.get('/', (req, res) => {
+app.get('/', (req: Request, res: Response) => {
   const authToken = req.headers.authorization;
   
   if (!authToken) {

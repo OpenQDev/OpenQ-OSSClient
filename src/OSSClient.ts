@@ -1,5 +1,5 @@
 import TokenQueue from "./TokenQueue";
-import axios from "axios"
+import axios, { AxiosResponse, AxiosError } from "axios"
 
 /**
  * The OSSClient is a wrapper around several data sources on open-source software
@@ -11,15 +11,22 @@ import axios from "axios"
  * - caching by storing results in a local database
  * - formatting by returning results in a consistent format
  */
+type DataSource = {
+  endpoint: string;
+  token: string;
+};
+
+type DataSources = Record<string, DataSource>;
+
 export default class OSSClient {
 		
 	tokenQueue;
 	
-	constructor(type) {
+	constructor(type: string) {
 		this.tokenQueue = new TokenQueue(type);
 	}
 
-	dataSources = {
+	dataSources: DataSources = {
 		localhost: {
 			endpoint: 'http://localhost:3000',
 			token: 'mock_token'
@@ -44,7 +51,9 @@ export default class OSSClient {
 	 	}
 	}
 
-  makeRequest = async (url, dataSourceKey) => {
+  makeRequest = async (request: any) => {
+		const dataSourceKey: string = "graphQL";
+
     if (!this.dataSources.hasOwnProperty(dataSourceKey)) {
       throw new Error('Invalid data source key');
     }
@@ -53,25 +62,27 @@ export default class OSSClient {
     const authToken = this.tokenQueue.getToken(); // Get the first token from the deque
 
     try {
-      const response = await axios.get(url, {
+      const response: AxiosResponse = await axios.get(url, {
         headers: {
           Authorization: `Bearer ${authToken}`,
         },
       });
 
       return response.data;
-    } catch (error) {
+    } catch (error: any) {
       throw new Error(`Request failed: ${error.message}`);
     }
   };
 }
 
 // Example usage
-const client = new OSSClient();
+const client = new OSSClient('in-memory');
 const dataSourceKey = 'localhost';
 const url = client.dataSources[dataSourceKey].endpoint;
 
-client.makeRequest(url, dataSourceKey)
+const query = "query { viewer { login } }"
+
+client.makeRequest(query)
   .then(data => {
     console.log('Response:', data);
   })
