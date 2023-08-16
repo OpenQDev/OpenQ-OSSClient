@@ -1,4 +1,4 @@
-import DequeueSet from './dequeueset/DequeueSet'
+import { DequeueSet } from './types'
 import InMemoryDequeueSet from './dequeueset/InMemoryDequeueSet'
 import RedisDequeueSet from './dequeueset/RedisDequeueSet'
 import StorageType from './StorageType'

@@ -1,4 +1,4 @@
-import DequeueSet from './DequeueSet'
+import { DequeueSet } from '../types'
 
 export default class InMemoryDequeueSet implements DequeueSet {
   items: Record<string, boolean>;

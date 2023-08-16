@@ -7,7 +7,7 @@
 // This gives it time to "reload" while we use the next token in the dequeue set
 // The uniqueness property is important because we don't want to use the same token twice in a row after its been exhausted
 
-export default interface DequeueSet {
+export interface DequeueSet {
 	items: Record<string, boolean>;
 	queue: string[];
 
