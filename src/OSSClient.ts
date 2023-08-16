@@ -1,4 +1,4 @@
-import TokenQueue from "./TokenQueue";
+import TokenQueue from "@src/TokenQueue";
 import axios, { AxiosResponse } from "axios"
 import { StorageType, DataSources } from '@types';
 

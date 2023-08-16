@@ -6,11 +6,12 @@
     "strict": true,
     "esModuleInterop": true,
     "moduleResolution": "node",
-    "baseUrl": "./src", // Set the base URL for resolving paths
+		"baseUrl": "./", 
     "paths": {
-      "@types": ["types"] // Define the path alias for types
+			"@src/*": ["src/*"],
+      "@types": ["src/types"] // Define the path alias for types
     }
   },
-  "include": ["**/*.ts"], // Update include patterns
-  "exclude": ["node_modules", "__tests__"]
+  "include": ["src/**/*.ts", "__tests__/**/*.ts"],
+  "exclude": ["node_modules"]
 }
