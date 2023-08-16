@@ -12,6 +12,7 @@
       "@types": ["src/types"] // Define the path alias for types
     }
   },
-  "include": ["src/**/*.ts", "__tests__/**/*.ts"],
+	"types": ["@types/jest"],
+  "include": ["src/**/*.ts", "__tests__/**/*.test.ts"],
   "exclude": ["node_modules", "dist"]
 }
