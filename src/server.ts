@@ -1,27 +1,27 @@
 import express, { Request, Response } from 'express';
 import bodyParser from 'body-parser';
+import OSSClient from './OSSClient'; // Assuming the path to your OSSClient file
+import { StorageType } from './types'; // Assuming the path to your types file
 
 const app = express();
+const port = process.env.PORT || 3000;
+
 app.use(bodyParser.json());
 
-const validTokens = ['valid_token_1', 'valid_token_2', 'valid_token_3'];
+// Create an instance of OSSClient
+const ossClient = new OSSClient(StorageType.InMemory);
 
-app.get('/', (req: Request, res: Response) => {
-  const authToken = req.headers.authorization;
-  
-  if (!authToken) {
-    return res.status(401).json({ message: 'Authorization token is missing.' });
-  }
-
-  if (validTokens.includes(authToken)) {
-    // Perform your authorized logic here
-    return res.json({ message: 'Authorized access.' });
-  } else {
-    return res.status(403).json({ message: 'Unauthorized access.' });
+// Define a POST route for making requests
+app.post('/', async (req: Request, res: Response) => {
+  try {
+    const query = req.body.query as any; // Assuming the client sends the query in the request body
+    const response = await ossClient.makeRequest(query);
+    res.json(response);
+  } catch (error: any) {
+    res.status(500).json({ error: error.message });
   }
 });
 
-const PORT = 3000;
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
+app.listen(port, () => {
+  console.log(`Server is running on port ${port}`);
 });
