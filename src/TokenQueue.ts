@@ -1,7 +1,6 @@
-import { DequeueSet } from './types'
+import { DequeueSet, StorageType } from '@types'
 import InMemoryDequeueSet from './dequeueset/InMemoryDequeueSet'
 import RedisDequeueSet from './dequeueset/RedisDequeueSet'
-import { StorageType } from './types'
 
 export default class TokenQueue {
 	dequeueSet: DequeueSet;

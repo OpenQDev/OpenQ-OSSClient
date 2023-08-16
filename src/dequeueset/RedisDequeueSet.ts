@@ -1,4 +1,4 @@
-import { DequeueSet } from '../types'
+import { DequeueSet } from '@types'
 
 export default class RedisDequeueSet implements DequeueSet {
   items: Record<string, boolean>;
