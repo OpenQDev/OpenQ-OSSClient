@@ -6,4 +6,4 @@ RUN yarn
 COPY . .
 EXPOSE 3003
 RUN yarn build
-ENTRYPOINT tree -I node_modules/
+ENTRYPOINT yarn start
