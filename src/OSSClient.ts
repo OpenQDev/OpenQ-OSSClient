@@ -46,35 +46,63 @@ export default class OSSClient {
 	 	}
 	}
 
-  makeRequest = async (query: any) => {
-		// TODO: Add support for multiple data sources. For now, just use the Github GraphQL API
+	addToken(token: string): void {
+		this.tokenQueue.addToken(token);
+	}
+
+	removeToken(token: string): void {
+		this.tokenQueue.removeToken(token);
+	}
+
+	rotateToken(): string | null {
+		return this.tokenQueue.rotateToken();
+	}
+
+	makeRequest = async (query: any, maxRetries = 3) => {
 		const dataSourceKey: string = "graphQL";
 
-    if (!this.dataSources.hasOwnProperty(dataSourceKey)) {
-      throw new Error('Invalid data source key');
-    }
+		if (!this.dataSources.hasOwnProperty(dataSourceKey)) {
+			throw new Error('Invalid data source key');
+		}
 
-    const dataSource = this.dataSources[dataSourceKey];
-    const authToken = this.tokenQueue.getToken(); // Get the first token from the deque
+		const dataSource = this.dataSources[dataSourceKey];
+		let authToken = this.tokenQueue.getToken(); // Get the first token from the deque
 
 		if (authToken === null) {
 			throw new Error('No tokens available');
 		}
 
-    try {
-			const response: AxiosResponse = await axios.post(
-				dataSource.endpoint,
-				{ query },
-				{
-					headers: {
-						Authorization: `Bearer ${authToken}`,
-					},
-				}
-			);
+		let retryCount = 0;
 
-      return response.data;
-    } catch (error: any) {
-      throw new Error(`Request failed: ${error.message}`);
-    }
-  };
+		while (retryCount < maxRetries) {
+			try {
+				const response: AxiosResponse = await axios.post(
+					dataSource.endpoint,
+					{ query },
+					{
+						headers: {
+							Authorization: `Bearer ${authToken}`,
+						},
+					}
+				);
+
+				return response.data;
+			} catch (error: any) {
+				if (error.response && error.response.status === 401) {
+					// Rotate the token only if the response is a 401 Unauthorized
+					authToken = this.rotateToken();
+				} else {
+					// Rethrow other errors
+					throw new Error(`Request failed: ${error.message}`);
+				}
+
+				retryCount++;
+				
+				// Wait for a moment before retrying (you can adjust the duration)
+				await new Promise(resolve => setTimeout(resolve, 1000));
+			}
+		}
+
+		throw new Error(`Request failed after ${maxRetries} retries`);
+	};
 }

@@ -57,4 +57,15 @@ export default class TokenQueue {
   sendToBack(token: string): void {
     return this.dequeueSet.sendToBack(token);
   }
+
+	  /**
+   * Moves a token to the back of the token queue, and then returns the next token in the queue
+   */
+		rotateToken(): string | null{
+			// Send the current token to the back of the queue
+			if (this.dequeueSet.peek() !== null) {
+				this.dequeueSet.sendToBack(this.dequeueSet.peek() as string);
+			}
+			return this.dequeueSet.peek();
+		}
 }
