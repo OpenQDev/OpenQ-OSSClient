@@ -5,8 +5,12 @@
     "outDir": "./dist",
     "strict": true,
     "esModuleInterop": true,
-		"moduleResolution": "node"
+    "moduleResolution": "node",
+    "baseUrl": "./src", // Set the base URL for resolving paths
+    "paths": {
+      "@types": ["types"] // Define the path alias for types
+    }
   },
-  "include": ["src/*.ts", "src/**/*.ts"],
-  "exclude": ["node_modules"],
+  "include": ["**/*.ts"], // Update include patterns
+  "exclude": ["node_modules", "__tests__"]
 }
