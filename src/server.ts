@@ -4,7 +4,7 @@ import OSSClient from './OSSClient'; // Assuming the path to your OSSClient file
 import { StorageType } from './types'; // Assuming the path to your types file
 
 const app = express();
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 3003;
 
 app.use(bodyParser.json());
 
