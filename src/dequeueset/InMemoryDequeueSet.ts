@@ -1,14 +1,32 @@
 import { DequeueSet } from '@types'
 
+/**
+ * Represents an in-memory dequeue set that stores unique items in a queue.
+ */
 export default class InMemoryDequeueSet implements DequeueSet {
+  /**
+   * A dictionary storing whether an item exists in the dequeue set.
+   */
   items: Record<string, boolean>;
-	queue: string[];
 
-	constructor() {
+  /**
+   * An array representing the queue of items in the dequeue set.
+   */
+  queue: string[];
+
+  /**
+   * Creates an instance of InMemoryDequeueSet.
+   * Initializes the items dictionary and the queue array.
+   */
+  constructor() {
     this.items = {};
     this.queue = [];
   }
 
+  /**
+   * Enqueues an item into the dequeue set if it doesn't already exist.
+   * @param item - The item to be enqueued.
+   */
   enqueue(item: string): void {
     if (!this.items.hasOwnProperty(item)) {
       this.items[item] = true;
@@ -16,23 +34,31 @@ export default class InMemoryDequeueSet implements DequeueSet {
     }
   }
 
+  /**
+   * Dequeues and removes the first item from the dequeue set.
+   * @returns The dequeued item, or null if the dequeue set is empty.
+   */
   dequeue(): string | null {
     if (this.isEmpty()) {
       return null;
     }
 
     const item = this.queue.shift();
-		const result = item !== undefined ? item : null;
+    const result = item !== undefined ? item : null;
 
-		if (result === null) {
-			return null;
-		} else {
-			delete this.items[result];
-		}
+    if (result === null) {
+      return null;
+    } else {
+      delete this.items[result];
+    }
 
     return result;
   }
 
+  /**
+   * Retrieves the first item in the dequeue set without removing it.
+   * @returns The first item, or null if the dequeue set is empty.
+   */
   peek(): string | null {
     if (this.isEmpty()) {
       return null;
@@ -41,14 +67,22 @@ export default class InMemoryDequeueSet implements DequeueSet {
     return this.queue[0];
   }
 
-  remove(item: string) {
+  /**
+   * Removes a specified item from the dequeue set.
+   * @param item - The item to be removed.
+   */
+  remove(item: string): void {
     if (this.items.hasOwnProperty(item)) {
       delete this.items[item];
       this.queue = this.queue.filter((queueItem: string) => queueItem !== item);
     }
   }
 
-  sendToBack(item: string) {
+  /**
+   * Moves a specified item to the back of the dequeue set.
+   * @param item - The item to be moved to the back.
+   */
+  sendToBack(item: string): void {
     if (this.items.hasOwnProperty(item)) {
       const index = this.queue.indexOf(item);
       if (index !== -1) {
@@ -58,9 +92,13 @@ export default class InMemoryDequeueSet implements DequeueSet {
     }
   }
 
-	isEmpty(): boolean {
-		return this.queue.length === 0;
-	}
+  /**
+   * Checks if the dequeue set is empty.
+   * @returns True if the dequeue set is empty, otherwise false.
+   */
+  isEmpty(): boolean {
+    return this.queue.length === 0;
+  }
 }
 
 // Example usage
@@ -73,7 +111,7 @@ inMemoryDequeueSet.enqueue('valid_token_3');
 console.log(inMemoryDequeueSet);
 
 if (!inMemoryDequeueSet.isEmpty()) {
-	inMemoryDequeueSet.sendToBack(inMemoryDequeueSet.peek() as string);
+  inMemoryDequeueSet.sendToBack(inMemoryDequeueSet.peek() as string);
 }
 
-console.log(inMemoryDequeueSet)
+console.log(inMemoryDequeueSet);
