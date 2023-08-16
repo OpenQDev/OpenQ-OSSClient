@@ -1,5 +1,5 @@
-const TokenQueue = require("./TokenQueue")
-const axios = require('axios');
+import TokenQueue from "./TokenQueue";
+import axios from "axios"
 
 /**
  * The OSSClient is a wrapper around several data sources on open-source software
@@ -11,7 +11,7 @@ const axios = require('axios');
  * - caching by storing results in a local database
  * - formatting by returning results in a consistent format
  */
-class OSSClient {
+export default class OSSClient {
 		
 	tokenQueue;
 	
@@ -32,10 +32,6 @@ class OSSClient {
 				endpoint: 'https://api.github.com',
 				token: 'ghauth'
 		},
-		bigquery: {
-				endpoint: 'https://bigquery.googleapis.com/bigquery/v2/projects/YOUR_PROJECT_ID/queries',
-				token: 'gcloudauth'
-		},
 		codesearch: {
 			endpoint: 'https://api.github.com/search/code?VARIABLES',
 			token: 'ghauth'
@@ -47,37 +43,6 @@ class OSSClient {
 			token: 'none'
 	 	}
 	}
-	
-	makeBigQueryRequest = async () => {
-			const userId = 93455288;
-			const startYear = 20;
-			const endYear = 23;
-
-			const query = `SELECT DISTINCT repo.url FROM githubarchive.year.20* WHERE type IN ('PushEvent', 'PullRequestEvent') AND (_TABLE_SUFFIX BETWEEN '${startYear}' AND '${endYear}') AND actor.id = ${userId}`;
-
-			try {
-					const response = await axios.post(
-							'https://bigquery.googleapis.com/bigquery/v2/projects/YOUR_PROJECT_ID/queries',
-							{
-									query: query,
-									useLegacySql: false
-							},
-							{
-									headers: {
-											Authorization: `Bearer ${accessToken}`,
-											'Content-Type': 'application/json'
-									}
-							}
-					);
-
-					const results = response.data;
-					// Process the results as needed
-					console.log(results);
-			} catch (error) {
-				// implement retry logic here for if it 401s -> refresh token -> retry
-				console.error('Error making BigQuery request:', error);
-			}
-	};
 
   makeRequest = async (url, dataSourceKey) => {
     if (!this.dataSources.hasOwnProperty(dataSourceKey)) {
@@ -99,7 +64,6 @@ class OSSClient {
       throw new Error(`Request failed: ${error.message}`);
     }
   };
-
 }
 
 // Example usage

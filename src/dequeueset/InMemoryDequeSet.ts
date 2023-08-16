@@ -1,6 +1,6 @@
-import './DequeueSet.js'
+import './DequeueSet'
 
-class InMemoryDequeueSet implements DequeueSet {
+export default class InMemoryDequeueSet implements DequeueSet {
   constructor() {
     this.items = {};
     this.queue = [];

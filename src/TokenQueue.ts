@@ -1,11 +1,11 @@
-const DequeueSet = require('./dequeueset/DequeueSet.js')
-const InMemoryDequeueSet = require('./dequeueset/InMemoryDequeueSet.js')
-const RedisDequeueSet = require('./dequeueset/RedisDequeueSet.js')
+import DequeueSet from './dequeueset/DequeueSet.js'
+import InMemoryDequeueSet from './dequeueset/InMemoryDequeueSet.js'
+import RedisDequeueSet from './dequeueset/RedisDequeueSet.js'
 
-class TokenQueue implements TokenQueue {
-	dequeueSet DequeueSet;
+class TokenQueue {
+	dequeueSet: DequeueSet;
 	
-	constructor(memoryType) {
+	constructor(type) {
 		if (type == 'memory') {
 			this.dequeueSet = new InMemoryDequeueSet();
 		} else if (type == 'redis') {
