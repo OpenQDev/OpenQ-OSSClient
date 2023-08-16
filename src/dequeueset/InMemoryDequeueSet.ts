@@ -1,34 +1,41 @@
 import DequeueSet from './DequeueSet'
 
 export default class InMemoryDequeueSet implements DequeueSet {
-  items: any;
-	queue: any;
+  items: Record<string, boolean>;
+	queue: string[];
 
 	constructor() {
     this.items = {};
     this.queue = [];
   }
 
-  enqueue(item: string) {
+  enqueue(item: string): void {
     if (!this.items.hasOwnProperty(item)) {
       this.items[item] = true;
       this.queue.push(item);
     }
   }
 
-  dequeue() {
-    if (this.queue.length === 0) {
-      return undefined;
+  dequeue(): string | null {
+    if (this.isEmpty()) {
+      return null;
     }
 
     const item = this.queue.shift();
-    delete this.items[item];
-    return item;
+		const result = item !== undefined ? item : null;
+
+		if (result === null) {
+			return null;
+		} else {
+			delete this.items[result];
+		}
+
+    return result;
   }
 
-  peek() {
-    if (this.queue.length === 0) {
-      return undefined;
+  peek(): string | null {
+    if (this.isEmpty()) {
+      return null;
     }
 
     return this.queue[0];
@@ -50,6 +57,10 @@ export default class InMemoryDequeueSet implements DequeueSet {
       }
     }
   }
+
+	isEmpty(): boolean {
+		return this.queue.length === 0;
+	}
 }
 
 // Example usage
@@ -60,6 +71,9 @@ inMemoryDequeueSet.enqueue('valid_token_2');
 inMemoryDequeueSet.enqueue('valid_token_3');
 
 console.log(inMemoryDequeueSet);
-inMemoryDequeueSet.sendToBack(inMemoryDequeueSet.peek());
+
+if (!inMemoryDequeueSet.isEmpty()) {
+	inMemoryDequeueSet.sendToBack(inMemoryDequeueSet.peek() as string);
+}
 
 console.log(inMemoryDequeueSet)

@@ -1,47 +1,54 @@
 import DequeueSet from './DequeueSet'
 
 export default class RedisDequeueSet implements DequeueSet {
-  items: any;
-	queue: any;
+  items: Record<string, boolean>;
+	queue: string[];
 
 	constructor() {
     this.items = {};
     this.queue = [];
   }
 
-  enqueue(item: string) {
+  enqueue(item: string): void {
     if (!this.items.hasOwnProperty(item)) {
       this.items[item] = true;
       this.queue.push(item);
     }
   }
 
-  dequeue() {
-    if (this.queue.length === 0) {
-      return undefined;
+  dequeue(): string | null {
+    if (this.isEmpty()) {
+      return null;
     }
 
     const item = this.queue.shift();
-    delete this.items[item];
-    return item;
+		const result = item !== undefined ? item : null;
+
+		if (result === null) {
+			return null;
+		} else {
+			delete this.items[result];
+		}
+
+    return result;
   }
 
-  peek() {
-    if (this.queue.length === 0) {
-      return undefined;
+  peek(): string | null {
+    if (this.isEmpty()) {
+      return null;
     }
 
     return this.queue[0];
   }
 
-  remove(item: string) {
+  remove(item: string): void {
     if (this.items.hasOwnProperty(item)) {
       delete this.items[item];
       this.queue = this.queue.filter((queueItem: string) => queueItem !== item);
     }
   }
 
-  sendToBack(item: string) {
+  sendToBack(item: string): void {
     if (this.items.hasOwnProperty(item)) {
       const index = this.queue.indexOf(item);
       if (index !== -1) {
@@ -50,6 +57,10 @@ export default class RedisDequeueSet implements DequeueSet {
       }
     }
   }
+
+	isEmpty(): boolean {
+		return this.queue.length === 0;
+	}
 }
 
 // Example usage
@@ -60,6 +71,9 @@ redisDequeueSet.enqueue('valid_token_2');
 redisDequeueSet.enqueue('valid_token_3');
 
 console.log(redisDequeueSet);
-redisDequeueSet.sendToBack(redisDequeueSet.peek());
+
+if (!redisDequeueSet.isEmpty()) {
+	redisDequeueSet.sendToBack(redisDequeueSet.peek() as string);
+}
 
 console.log(redisDequeueSet)

@@ -1,14 +1,15 @@
 import DequeueSet from './dequeueset/DequeueSet'
 import InMemoryDequeueSet from './dequeueset/InMemoryDequeueSet'
 import RedisDequeueSet from './dequeueset/RedisDequeueSet'
+import StorageType from './StorageType'
 
 export default class TokenQueue {
 	dequeueSet: DequeueSet;
 	
-	constructor(type: string) {
-		if (type == 'memory') {
+	constructor(type: StorageType) {
+		if (type == StorageType.InMemory) {
 			this.dequeueSet = new InMemoryDequeueSet();
-		} else if (type == 'redis') {
+		} else if (type == StorageType.Redis) {
 			this.dequeueSet = new RedisDequeueSet();
 		} else {
 			throw new Error('Unknown TokenQueue initialization type')
@@ -29,7 +30,7 @@ export default class TokenQueue {
 	 *
 	 * @return The token at the front of the queue.
 	 */
-	getToken(): string {
+	getToken(): string | null {
 		return this.dequeueSet.peek();
 	}
 

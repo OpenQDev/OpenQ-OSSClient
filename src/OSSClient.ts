@@ -1,5 +1,6 @@
 import TokenQueue from "./TokenQueue";
-import axios, { AxiosResponse, AxiosError } from "axios"
+import axios, { AxiosResponse } from "axios"
+import StorageType from "./StorageType";
 
 /**
  * The OSSClient is a wrapper around several data sources on open-source software
@@ -20,9 +21,9 @@ type DataSources = Record<string, DataSource>;
 
 export default class OSSClient {
 		
-	tokenQueue;
+	tokenQueue: TokenQueue;
 	
-	constructor(type: string) {
+	constructor(type: StorageType) {
 		this.tokenQueue = new TokenQueue(type);
 	}
 
@@ -76,7 +77,7 @@ export default class OSSClient {
 }
 
 // Example usage
-const client = new OSSClient('in-memory');
+const client = new OSSClient(StorageType.InMemory);
 const dataSourceKey = 'localhost';
 const url = client.dataSources[dataSourceKey].endpoint;
 

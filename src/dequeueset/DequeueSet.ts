@@ -8,12 +8,13 @@
 // The uniqueness property is important because we don't want to use the same token twice in a row after its been exhausted
 
 export default interface DequeueSet {
-	items: string[];
+	items: Record<string, boolean>;
 	queue: string[];
 
 	enqueue(item: string): void;
-	dequeue(): string;
-	peek(): string;
+	dequeue(): string | null;
+	peek(): string | null;
 	remove(item: string): void;
 	sendToBack(item: string): void;
+	isEmpty(): boolean;
 }
