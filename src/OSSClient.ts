@@ -46,7 +46,8 @@ export default class OSSClient {
 	 	}
 	}
 
-  makeRequest = async (request: any) => {
+  makeRequest = async (query: any) => {
+		// TODO: Add support for multiple data sources. For now, just use the Github GraphQL API
 		const dataSourceKey: string = "graphQL";
 
     if (!this.dataSources.hasOwnProperty(dataSourceKey)) {
@@ -56,12 +57,20 @@ export default class OSSClient {
     const dataSource = this.dataSources[dataSourceKey];
     const authToken = this.tokenQueue.getToken(); // Get the first token from the deque
 
+		if (authToken === null) {
+			throw new Error('No tokens available');
+		}
+
     try {
-      const response: AxiosResponse = await axios.get(url, {
-        headers: {
-          Authorization: `Bearer ${authToken}`,
-        },
-      });
+			const response: AxiosResponse = await axios.post(
+				dataSource.endpoint,
+				{ query },
+				{
+					headers: {
+						Authorization: `Bearer ${authToken}`,
+					},
+				}
+			);
 
       return response.data;
     } catch (error: any) {
