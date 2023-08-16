@@ -1,53 +1,60 @@
-import { DequeueSet, StorageType } from '@types'
+/**
+ * Represents a token queue that utilizes different storage types for managing tokens.
+ */
+import { DequeueSet, StorageType } from '@types';
 import InMemoryDequeueSet from '@src/dequeueset/InMemoryDequeueSet';
-import RedisDequeueSet from '@src/dequeueset/RedisDequeueSet'
+import RedisDequeueSet from '@src/dequeueset/RedisDequeueSet';
 
 export default class TokenQueue {
-	dequeueSet: DequeueSet;
-	
-	constructor(type: StorageType) {
-		if (type == StorageType.InMemory) {
-			this.dequeueSet = new InMemoryDequeueSet();
-		} else if (type == StorageType.Redis) {
-			this.dequeueSet = new RedisDequeueSet();
-		} else {
-			throw new Error('Unknown TokenQueue initialization type')
-		}
-	}
+  /**
+   * @property {DequeueSet} dequeueSet - An instance of a dequeue set implementation.
+   */
+  dequeueSet: DequeueSet;
 
-	/**
-	 * Adds a token to the queue.
-	 *
-	 * @param token The token to be added to the queue.
-	 */
-	addToken(token: string) {
-		this.dequeueSet.enqueue(token);
-	}
+  /**
+   * Constructs a new instance of TokenQueue based on the specified storage type.
+   * @param {StorageType} type - The storage type for initializing the token queue.
+   * @throws {Error} Throws an error if an unknown initialization type is provided.
+   */
+  constructor(type: StorageType) {
+    if (type == StorageType.InMemory) {
+      this.dequeueSet = new InMemoryDequeueSet();
+    } else if (type == StorageType.Redis) {
+      this.dequeueSet = new RedisDequeueSet();
+    } else {
+      throw new Error('Unknown TokenQueue initialization type');
+    }
+  }
 
-	/**
-	 * Retrieves and removes a token from the front of the queue.
-	 *
-	 * @return The token at the front of the queue.
-	 */
-	getToken(): string | null {
-		return this.dequeueSet.peek();
-	}
+  /**
+   * Adds a token to the token queue.
+   * @param {string} token - The token to be added.
+   */
+  addToken(token: string) {
+    this.dequeueSet.enqueue(token);
+  }
 
-	/**
-	 * Removes a specific token from the queue.
-	 *
-	 * @param token The token to be removed from the queue.
-	 */
-	removeToken(token: string): void {
-		this.dequeueSet.remove(token);
-	}
+  /**
+   * Retrieves the next token from the token queue without removing it.
+   * @returns {string | null} The next token, or null if the queue is empty.
+   */
+  getToken(): string | null {
+    return this.dequeueSet.peek();
+  }
 
-	/**
-	 * Sends a specific token to the back of the queue.
-	 *
-	 * @param token The token to be moved to the back of the queue.
-	 */
-	sendToBack(token: string): void {
-		return this.dequeueSet.sendToBack(token);
-	}
+  /**
+   * Removes a token from the token queue.
+   * @param {string} token - The token to be removed.
+   */
+  removeToken(token: string): void {
+    this.dequeueSet.remove(token);
+  }
+
+  /**
+   * Moves a token to the back of the token queue if it exists.
+   * @param {string} token - The token to be moved to the back.
+   */
+  sendToBack(token: string): void {
+    return this.dequeueSet.sendToBack(token);
+  }
 }
