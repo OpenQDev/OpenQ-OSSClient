@@ -17,6 +17,10 @@ export default class OSSClient {
 		
 	tokenQueue: TokenQueue;
 	
+	/**
+	 * Creates an instance of the OSSClient.
+	 * @param {StorageType} type - The type of storage for tokens.
+	 */
 	constructor(type: StorageType) {
 		this.tokenQueue = new TokenQueue(type);
 	}
@@ -46,18 +50,37 @@ export default class OSSClient {
 	 	}
 	}
 
+	/**
+	 * Adds a token to the token queue.
+	 * @param {string} token - The token to add.
+	 */
 	addToken(token: string): void {
 		this.tokenQueue.addToken(token);
 	}
 
+	/**
+	 * Removes a token from the token queue.
+	 * @param {string} token - The token to remove.
+	 */
 	removeToken(token: string): void {
 		this.tokenQueue.removeToken(token);
 	}
 
+	/**
+	 * Rotates the current token in use.
+	 * @returns {string | null} The rotated token or null if no more tokens are available.
+	 */
 	rotateToken(): string | null {
 		return this.tokenQueue.rotateToken();
 	}
 
+	/**
+	 * Makes a request to the specified data source.
+	 * @param {any} query - The query to send.
+	 * @param {number} maxRetries - The maximum number of retries on failure.
+	 * @returns {Promise<any>} The response data from the request.
+	 * @throws {Error} If the data source key is invalid or if the request fails after maxRetries.
+	 */
 	makeRequest = async (query: any, maxRetries = 3) => {
 		const dataSourceKey: string = "graphQL";
 
