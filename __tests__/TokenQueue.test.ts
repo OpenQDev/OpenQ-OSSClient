@@ -83,4 +83,48 @@ describe('TokenQueue', () => {
       expect(mockSendToBack).toHaveBeenCalledWith('token123');
     });
   });
+
+	describe('rotateToken', () => {
+		it('should move the current token to the back and return the next token', () => {
+			const tokenQueue = new TokenQueue(StorageType.InMemory);
+			
+			// Mocking the peek and sendToBack methods
+			const mockPeek = jest.spyOn(tokenQueue.dequeueSet, 'peek');
+			mockPeek.mockReturnValueOnce('token1');
+			mockPeek.mockReturnValueOnce('token1');
+			mockPeek.mockReturnValueOnce('token2');
+			
+			const mockSendToBack = jest.spyOn(tokenQueue.dequeueSet, 'sendToBack');
+			
+			const result = tokenQueue.rotateToken();
+			
+			// Expect the peek method to have been called
+			expect(mockPeek).toHaveBeenCalled();
+			
+			// Expect the sendToBack method to have been called with the current token
+			expect(mockSendToBack).toHaveBeenCalledWith('token1');
+			
+			// Expect the result to be the next token after rotation
+			expect(result).toBe('token2');
+		});
+		
+		it('should return null when the queue is empty', () => {
+			const tokenQueue = new TokenQueue(StorageType.InMemory);
+			
+			// Mocking the peek method to return null (empty queue)
+			const mockPeek = jest.spyOn(tokenQueue.dequeueSet, 'peek');
+			mockPeek.mockReturnValueOnce(null);
+			mockPeek.mockReturnValueOnce(null);
+			mockPeek.mockReturnValueOnce(null);
+			
+			const result = tokenQueue.rotateToken();
+			
+			// Expect the peek method to have been called
+			expect(mockPeek).toHaveBeenCalled();
+			
+			// Expect the result to be null as the queue is empty
+			expect(result).toBeNull();
+		});
+	});
+	
 });
