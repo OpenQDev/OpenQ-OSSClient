@@ -1,4 +1,4 @@
-import InMemoryDequeueSet from '@src/dequeueset/InMemoryDequeueSet';
+import InMemoryDequeueSet from '../src/dequeueset/InMemoryDequeueSet';
 
 describe('InMemoryDequeueSet', () => {
   let dequeueSet: InMemoryDequeueSet;
