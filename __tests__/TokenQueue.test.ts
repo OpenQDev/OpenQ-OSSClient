@@ -1,11 +1,11 @@
-import TokenQueue from '@src/TokenQueue';
-import { StorageType } from '@src/types';
-import InMemoryDequeueSet from '@src/dequeueset/InMemoryDequeueSet';
-import RedisDequeueSet from '@src/dequeueset/RedisDequeueSet';
+import TokenQueue from '../src/TokenQueue';
+import { StorageType } from '../src/types';
+import InMemoryDequeueSet from '../src/dequeueset/InMemoryDequeueSet';
+import RedisDequeueSet from '../src/dequeueset/RedisDequeueSet';
 
 // Mock the InMemoryDequeueSet and RedisDequeueSet classes
-jest.mock('@src/dequeueset/InMemoryDequeueSet');
-jest.mock('@src/dequeueset/RedisDequeueSet');
+jest.mock('../src/dequeueset/InMemoryDequeueSet');
+jest.mock('../src/dequeueset/RedisDequeueSet');
 
 describe('TokenQueue', () => {
   beforeEach(() => {

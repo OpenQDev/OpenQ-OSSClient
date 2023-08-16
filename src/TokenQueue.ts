@@ -1,9 +1,9 @@
 /**
  * Represents a token queue that utilizes different storage types for managing tokens.
  */
-import { DequeueSet, StorageType } from '@types';
-import InMemoryDequeueSet from '@src/dequeueset/InMemoryDequeueSet';
-import RedisDequeueSet from '@src/dequeueset/RedisDequeueSet';
+import { DequeueSet, StorageType } from './types';
+import InMemoryDequeueSet from './dequeueset/InMemoryDequeueSet';
+import RedisDequeueSet from './dequeueset/RedisDequeueSet';
 
 export default class TokenQueue {
   /**

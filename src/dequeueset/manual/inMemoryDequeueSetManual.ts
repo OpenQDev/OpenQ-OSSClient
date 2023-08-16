@@ -1,4 +1,4 @@
-import InMemoryDequeueSet from "@src/dequeueset/InMemoryDequeueSet"
+import InMemoryDequeueSet from "../InMemoryDequeueSet"
 
 // Example usage
 const inMemoryDequeueSet = new InMemoryDequeueSet();

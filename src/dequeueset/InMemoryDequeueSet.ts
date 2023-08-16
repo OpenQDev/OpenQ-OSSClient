@@ -1,4 +1,4 @@
-import { DequeueSet } from '@types'
+import { DequeueSet } from '../types'
 
 /**
  * Represents an in-memory dequeue set that stores unique items in a queue.
