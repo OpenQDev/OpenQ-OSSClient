@@ -33,6 +33,27 @@ app.post('/add-token', authorize, (req: Request, res: Response) => {
   }
 });
 
+// Define a POST route for adding an access token
+app.post('/remove-token', authorize, (req: Request, res: Response) => {
+  try {
+    const token = req.body.token as string; // Assuming the token is provided in the request body
+    ossClient.removeToken(token);
+    res.json({ message: 'Token removed successfully' });
+  } catch (error: any) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Define a POST route for adding an access token
+app.post('/rotate-token', authorize, (req: Request, res: Response) => {
+  try {
+    ossClient.rotateToken();
+    res.json({ message: 'Token rotated successfully' });
+  } catch (error: any) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 // Define a POST route for making requests
 app.post('/', async (req: Request, res: Response) => {
   try {
