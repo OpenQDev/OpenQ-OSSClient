@@ -46,7 +46,7 @@ The following is a list of data sources along with their endpoints and authentic
 		- https://gist.github.com/arfon/49ca314a5b0a00b1ebf91167db3ff02c
 	- NOT PURSUING: Even basic queries must process many GB, rate limit too low
 
-- **OSSInsights**
+- **OSSInsights** 
   - Endpoint: `https://api.ossinsight.io/v1`
   - Token: `none`
   - Rate Limiting: 600 requests per hour per IP address
