@@ -72,9 +72,12 @@ describe('OSSClient', () => {
       expect(response).toEqual(mockResponseData);
     });
 
-    it('should retry on 401 Unauthorized', async () => {
-      (ossClient as any).tokenQueue.addToken('invalid_token');
-      (ossClient as any).tokenQueue.addToken('valid_token');
+    it('should retry on 401 Unauthorized and rotate tokens before subsequent call', async () => {
+			const valid_token = 'valid_token';
+			const invalid_token = 'invalid_token';
+
+      (ossClient as any).tokenQueue.addToken(invalid_token);
+      (ossClient as any).tokenQueue.addToken(valid_token);
 
       const mockAxiosPost = axios.post as jest.Mock;
       mockAxiosPost
@@ -87,6 +90,7 @@ describe('OSSClient', () => {
       expect(mockAxiosPost).toHaveBeenCalledTimes(2);
 
       expect(response).toEqual(mockResponseData);
+      expect(ossClient.tokenQueue.dequeueSet.queue[0]).toEqual('valid_token');
     });
 
     it('should throw an error on repeated failures', async () => {

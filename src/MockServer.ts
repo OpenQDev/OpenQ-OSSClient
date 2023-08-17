@@ -9,8 +9,6 @@ let requestCounter = 0;
 app.post('/', (req: Request, res: Response) => {
   requestCounter++;
 
-	console.log('called')
-
   if (requestCounter <= 2) {
     // First and second requests, return 200
     return res.status(200).json({ message: 'Request authorized.' });
