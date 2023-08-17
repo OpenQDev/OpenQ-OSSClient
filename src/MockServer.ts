@@ -4,20 +4,20 @@ import bodyParser from 'body-parser';
 const app = express();
 app.use(bodyParser.json());
 
-const validTokens = ['valid_token_1', 'valid_token_2', 'valid_token_3'];
+let requestCounter = 0;
 
-app.get('/', (req: Request, res: Response) => {
-  const authToken = req.headers.authorization;
-  
-  if (!authToken) {
-    return res.status(401).json({ message: 'Authorization token is missing.' });
-  }
+app.post('/', (req: Request, res: Response) => {
+  requestCounter++;
 
-  if (validTokens.includes(authToken)) {
-    // Perform your authorized logic here
-    return res.json({ message: 'Authorized access.' });
+	console.log('called')
+
+  if (requestCounter <= 2) {
+    // First and second requests, return 200
+    return res.status(200).json({ message: 'Request authorized.' });
   } else {
-    return res.status(403).json({ message: 'Unauthorized access.' });
+    // Third request, return 401
+    requestCounter = 0; // Reset the counter
+    return res.status(401).json({ message: 'Authorization token is invalid. This should rotate tokens.' });
   }
 });
 

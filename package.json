@@ -10,6 +10,7 @@
     "build": "tsc",
     "start": "node dist/src/server.js",
     "dev": "nodemon --watch 'src/**/*.ts' --exec 'ts-node' src/server.ts",
+    "mock": "nodemon --watch 'src/**/*.ts' --exec 'ts-node' src/MockServer.ts",
     "test": "jest"
   },
   "dependencies": {

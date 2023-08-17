@@ -82,7 +82,7 @@ export default class OSSClient {
 	 * @throws {Error} If the data source key is invalid or if the request fails after maxRetries.
 	 */
 	makeRequest = async (query: any, maxRetries = 3) => {
-		const dataSourceKey: string = "graphQL";
+		const dataSourceKey: string = "localhost";
 
 		if (!this.dataSources.hasOwnProperty(dataSourceKey)) {
 			throw new Error('Invalid data source key');
@@ -96,8 +96,9 @@ export default class OSSClient {
 		}
 
 		let retryCount = 0;
-
+ 
 		while (retryCount < maxRetries) {
+			console.log('dataSource.endpoint', dataSource.endpoint)
 			try {
 				const response: AxiosResponse = await axios.post(
 					dataSource.endpoint,
