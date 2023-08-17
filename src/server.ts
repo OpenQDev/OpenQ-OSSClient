@@ -2,6 +2,8 @@ import express, { Request, Response } from 'express';
 import bodyParser from 'body-parser';
 import OSSClient from './OSSClient'; // Assuming the path to your OSSClient file
 import { StorageType } from './types'; // Assuming the path to your types file
+import dotenv from 'dotenv';
+dotenv.config();
 
 const app = express();
 const port = process.env.PORT || 3003;
@@ -11,7 +13,7 @@ app.use(bodyParser.json());
 // Create an instance of OSSClient
 const ossClient = new OSSClient(StorageType.InMemory);
 
-const apiSecret = 'your-api-secret';
+const apiSecret = process.env.SCHEDULER_API_SECRET;
 
 // Define a middleware for authorization check
 const authorize = (req: Request, res: Response, next: any) => {
@@ -21,6 +23,16 @@ const authorize = (req: Request, res: Response, next: any) => {
   }
   next();
 };
+
+// Define a POST route for adding an access token
+app.get('/show-tokens', authorize, (req: Request, res: Response) => {
+  try {
+    const token = req.body.token as string; // Assuming the token is provided in the request body
+    res.json({ tokens: ossClient.showTokens() });
+  } catch (error: any) {
+    res.status(500).json({ error: error.message });
+  }
+});
 
 // Define a POST route for adding an access token
 app.post('/add-token', authorize, (req: Request, res: Response) => {

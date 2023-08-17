@@ -90,7 +90,7 @@ Tokens are stored IN MEMORY in the container/process. So they are whiped out bet
 curl -X POST "https://drmdev.openq.dev/ossclient/add-token" \
 -H "Authorization: Bearer your-api-secret" \ 
 -H "Content-Type: application/json" \
--d '{ "token": "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" }'
+-d '{ "token": "TOKEN" }'
 ```
 
 Successful response should look like: `{"message":"Token added successfully"}`

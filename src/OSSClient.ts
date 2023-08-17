@@ -67,6 +67,13 @@ export default class OSSClient {
 	}
 
 	/**
+	 * Removes a token from the token queue.
+	 */
+	showTokens(): string[] {
+		return this.tokenQueue.dequeueSet.queue;
+	}
+
+	/**
 	 * Rotates the current token in use.
 	 * @returns {string | null} The rotated token or null if no more tokens are available.
 	 */
