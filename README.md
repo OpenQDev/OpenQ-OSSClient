@@ -77,3 +77,30 @@ Based on the response, `OSSClient` may tell `TokenQueue` to either A) send the t
 The `TokenQueue`, as an interface, can have multiple implemnetations.
 
 For example, the `InMemoryTokenQueue` and the `RedisTokenQueue`
+
+## How To
+
+### Add an Authorization Token
+
+It's actually just hardcoded as `your-api-secret` so don't change that
+
+Tokens are stored IN MEMORY in the container/process. So they are whiped out between deploys.
+
+```bash
+curl -X POST "https://drmdev.openq.dev/ossclient/add-token" \
+-H "Authorization: Bearer your-api-secret" \
+-H "Content-Type: application/json" \
+-d '{ "token": "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" }'
+```
+
+Successful response should look like: `{"message":"Token added successfully"}`
+
+### Proxy a Github Request Through It to get the token rotation and retry benefits
+
+```bash
+curl -X POST "https://drmdev.openq.dev/ossclient" \
+-H "Content-Type: application/json" \
+-d '{ "query": "{ viewer { login } }" }'
+```
+
+Successful response should look like: `{"data":{"viewer":{"login":"<the login of the PAT being used>"}}}`
